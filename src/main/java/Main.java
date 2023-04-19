@@ -12,6 +12,7 @@ public class Main {
             System.out.println("Сервер запущен");
 
             Storage storage = new Storage(); //создаем объект хранилища
+            SumCalculator sumCalculator = new SumCalculator(); //калькулятор, занимающийся вычислениями
 
             while (true) { //постоянная работа сервера
 
@@ -25,7 +26,7 @@ public class Main {
                     String jsonFromClient = reader.readLine();//получили строку в формате json от клиента
                     storage.selectCategory(jsonFromClient);
 
-                    writer.println(storage.formingJsonForAnswer());
+                    writer.println(sumCalculator.formingJsonForAnswer(storage));
                 }
             }
         } catch (IOException e) {

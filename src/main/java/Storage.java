@@ -6,7 +6,9 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class Storage {
     public static final String TSV_FILE = "categories.txt";
@@ -102,52 +104,40 @@ public class Storage {
         }
     }
 
-    private void findBiggestSum() {
-
-        Map<String, Integer> biggestCategory = new HashMap<>();
-
-        biggestCategory.put("еда", (food.stream()
-                .map(x -> x.getSum())
-                .mapToInt(y -> y)
-                .sum()));
-        biggestCategory.put("одежда", (cloth.stream()
-                .map(x -> x.getSum())
-                .mapToInt(y -> y)
-                .sum()));
-        biggestCategory.put("быт", (life.stream()
-                .map(x -> x.getSum())
-                .mapToInt(y -> y)
-                .sum()));
-        biggestCategory.put("финансы", (finances.stream()
-                .map(x -> x.getSum())
-                .mapToInt(y -> y)
-                .sum()));
-        biggestCategory.put("другое", (other.stream()
-                .map(x -> x.getSum())
-                .mapToInt(y -> y)
-                .sum()));
-
-        for (Map.Entry<String, Integer> kv : biggestCategory.entrySet()) {
-
-            if (kv.getValue() > maxSum) {
-                maxSum = kv.getValue();
-                maxCategory = kv.getKey();
-            }
-        }
+    public void setMaxSum(int maxSum) {
+        this.maxSum = maxSum;
     }
 
-    public String formingJsonForAnswer() {
-
-        findBiggestSum();
-
-        JSONObject answerTitle = new JSONObject();
-
-        JSONObject answerBody = new JSONObject();
-        answerBody.put("category", maxCategory);
-        answerBody.put("sum", maxSum);
-
-        answerTitle.put("maxCategory", answerBody);
-
-        return answerTitle.toJSONString();
+    public void setMaxCategory(String maxCategory) {
+        this.maxCategory = maxCategory;
     }
+
+    public List<Food> getFood() {
+        return food;
+    }
+
+    public List<Cloth> getCloth() {
+        return cloth;
+    }
+
+    public List<Life> getLife() {
+        return life;
+    }
+
+    public List<Finances> getFinances() {
+        return finances;
+    }
+
+    public List<Other> getOther() {
+        return other;
+    }
+
+    public int getMaxSum() {
+        return maxSum;
+    }
+
+    public String getMaxCategory() {
+        return maxCategory;
+    }
+
 }

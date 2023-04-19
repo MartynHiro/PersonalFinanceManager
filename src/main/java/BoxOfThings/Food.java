@@ -1,16 +1,7 @@
 package BoxOfThings;
 
-public class Food extends Things{
-    public Food(String title, String date, long sum) {
+public class Food extends Things {
+    public Food(String title, String date, int sum) {
         super(title, date, sum);
-    }
-
-    @Override
-    public String toString() {
-        return "Food{" +
-                "title='" + title + '\'' +
-                ", date='" + date + '\'' +
-                ", sum=" + sum +
-                '}';
     }
 }

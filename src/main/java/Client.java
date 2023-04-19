@@ -33,6 +33,8 @@ public class Client {
 
             writer.println(jsonLine);
 
+            System.out.println(reader.readLine());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,8 +45,6 @@ public class Client {
         purchaseJsonFile.put("title", purchase.getTitle());
         purchaseJsonFile.put("date", purchase.getDate());
         purchaseJsonFile.put("sum", purchase.getSum());
-
-//        System.out.println(purchaseJsonFile.toJSONString());
 
         //нет необходимости в самом файле, так что формируем просто строку в формате json
         return purchaseJsonFile.toJSONString();
@@ -60,8 +60,6 @@ public class Client {
 
             System.out.println("Введите сумму траты");
             purchase.setSum(scanner.nextInt());
-
-//            System.out.println(purchase);
 
         } catch (InputMismatchException e) {
             System.out.println("Нужно вводить цифры");

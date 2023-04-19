@@ -49,7 +49,11 @@ public class Purchase {
     }
 
     public void setSum(int sum) {
-        this.sum = sum;
+        if (sum >= 0) {
+            this.sum = sum;
+        } else {
+            System.out.println("Нельзя писать минусовые числа");
+        }
     }
 
     public String getTitle() {

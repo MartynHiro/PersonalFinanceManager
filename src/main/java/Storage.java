@@ -92,15 +92,20 @@ public class Storage {
 
     private void createThingsObject(String titleFromJson, String dateFromJson, int sumFromJson, String categoryFromTsv) {
         switch (categoryFromTsv) { //создаем подходящий объект
-            case "еда" -> food.add(new Food(titleFromJson, dateFromJson, sumFromJson));
-
-            case "одежда" -> cloth.add(new Cloth(titleFromJson, dateFromJson, sumFromJson));
-
-            case "быт" -> life.add(new Life(titleFromJson, dateFromJson, sumFromJson));
-
-            case "финансы" -> finances.add(new Finances(titleFromJson, dateFromJson, sumFromJson));
-
-            default -> other.add(new Other(titleFromJson, dateFromJson, sumFromJson));
+            case "еда":
+                food.add(new Food(titleFromJson, dateFromJson, sumFromJson));
+                break;
+            case "одежда":
+                cloth.add(new Cloth(titleFromJson, dateFromJson, sumFromJson));
+                break;
+            case "быт":
+                life.add(new Life(titleFromJson, dateFromJson, sumFromJson));
+                break;
+            case "финансы":
+                finances.add(new Finances(titleFromJson, dateFromJson, sumFromJson));
+                break;
+            default:
+                other.add(new Other(titleFromJson, dateFromJson, sumFromJson));
         }
     }
 

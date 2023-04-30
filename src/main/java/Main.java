@@ -19,9 +19,6 @@ public class Main {
                 try (Socket clientSocket = serverSocket.accept(); // ждем подключения клиента
                      PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
                      BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
-                    writer.println("Вы подключены!");
-
-                    System.out.println(reader.readLine());
 
                     String jsonFromClient = reader.readLine();//получили строку в формате json от клиента
                     storage.selectCategory(jsonFromClient);

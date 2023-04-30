@@ -22,10 +22,6 @@ public class Client {
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-            System.out.println(reader.readLine());
-
-            writer.println(USER_NAME + " подключился");
-
             userInput(purchase); //пользовательский ввод
 
             //формируем json строку из введенных данных для отправки ее серверу

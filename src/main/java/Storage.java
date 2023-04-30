@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Storage {
-    public static final String TSV_FILE = "categories.txt";
+    public static final String TSV_FILE = "categories.tsv";
     private List<Food> food;
     private List<Cloth> cloth;
     private List<Life> life;

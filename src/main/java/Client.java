@@ -11,9 +11,6 @@ import java.util.Scanner;
 public class Client {
     public static final String HOST = "127.0.0.1";
     public static final int PORT = 8989;
-
-    public static final String USER_NAME = "Сергей";
-
     public static void main(String[] args) {
 
         Purchase purchase = new Purchase();

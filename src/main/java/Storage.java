@@ -1,4 +1,3 @@
-import BoxOfThings.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -6,38 +5,36 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Storage {
-    public static final String TSV_FILE = "categories.tsv";
-    private List<Food> food;
-    private List<Cloth> cloth;
-    private List<Life> life;
-    private List<Finances> finances;
-    private List<Other> other;
-    private List<String[]> categoriesFromTsv;
-    private int maxSum = 0;
-    private String maxCategory = null;
 
-    public List<String[]> getCategoriesFromTsv() {
-        return categoriesFromTsv;
-    }
+    public static final String TSV_FILE = "categories.tsv";
+
+    private final List<String[]> linesFromTsv;
+
+    private String maxCategory;
+
+    private int maxSum;
 
     public Storage() {
-        this.food = new ArrayList<>();
-        this.cloth = new ArrayList<>();
-        this.life = new ArrayList<>();
-        this.finances = new ArrayList<>();
-        this.other = new ArrayList<>();
-        this.categoriesFromTsv = openTsvFile();
+        this.linesFromTsv = openTsvFile();
     }
 
-    //раскрываем tsv файл
-    public List<String[]> openTsvFile() {
+    private List<String[]> getAllLinesFromTsv() {
+        return linesFromTsv;
+    }
+
+    private Map<String, Integer> listOfPurchases = new HashMap<>();
+
+    public Map<String, Integer> getListOfPurchases() {
+        return listOfPurchases;
+    }
+
+    private List<String[]> openTsvFile() {
 
         ArrayList<String[]> data = new ArrayList<>();
+
         try (BufferedReader TSVReader = new BufferedReader(new FileReader(TSV_FILE))) {
             String line;
 
@@ -47,12 +44,12 @@ public class Storage {
                 data.add(lineItems);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return data;
     }
 
-    public void selectCategory(String jsonFromClient) throws IOException {
+    public void selectCategory(String jsonFromClient) {
 
         JSONParser parser = new JSONParser();
 
@@ -67,7 +64,7 @@ public class Storage {
 
             int sum = sumFromJson.intValue();
 
-            Optional<String[]> optionalLineFromTsv = getCategoriesFromTsv().stream()
+            Optional<String[]> optionalLineFromTsv = getAllLinesFromTsv().stream()
                     //смотрим в какую категорию можно положить покупку
                     .filter(item -> item[0].equals(titleFromJson))
                     .findAny();   //если есть хоть одно совпадение, он его достанет
@@ -78,71 +75,44 @@ public class Storage {
 
                 String categoryFromTsv = lineFromTsv[1];
 
-                createThingsObject(titleFromJson, dateFromJson, sum, categoryFromTsv);
+//если такая категория уже есть в мапе, то достаем ее и добавляем сумму покупки
+                if (listOfPurchases.containsKey(categoryFromTsv)) {
+                    listOfPurchases.put(categoryFromTsv, listOfPurchases.get(categoryFromTsv) + sum);
 
-            } else { //или присваиваем другое
+//если такой категории еще не сохранено, то просто добавляем ее в мапу
+                } else {
+                    listOfPurchases.put(categoryFromTsv, sum);
+                }
+
+            } else { //или присваиваем "другое" и поступаем так же, как если бы нашли категорию в tsv
                 String categoryFromTsv = "другое";
-                createThingsObject(titleFromJson, dateFromJson, sum, categoryFromTsv);
+
+                if (listOfPurchases.containsKey(categoryFromTsv)) {
+                    listOfPurchases.put(categoryFromTsv, listOfPurchases.get(categoryFromTsv) + sum);
+
+                } else {
+                    listOfPurchases.put(categoryFromTsv, sum);
+                }
             }
 
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-    }
-
-    private void createThingsObject(String titleFromJson, String dateFromJson, int sumFromJson, String categoryFromTsv) {
-        switch (categoryFromTsv) { //создаем подходящий объект
-            case "еда":
-                food.add(new Food(titleFromJson, dateFromJson, sumFromJson));
-                break;
-            case "одежда":
-                cloth.add(new Cloth(titleFromJson, dateFromJson, sumFromJson));
-                break;
-            case "быт":
-                life.add(new Life(titleFromJson, dateFromJson, sumFromJson));
-                break;
-            case "финансы":
-                finances.add(new Finances(titleFromJson, dateFromJson, sumFromJson));
-                break;
-            default:
-                other.add(new Other(titleFromJson, dateFromJson, sumFromJson));
-        }
-    }
-
-    public void setMaxSum(int maxSum) {
-        this.maxSum = maxSum;
-    }
-
-    public void setMaxCategory(String maxCategory) {
-        this.maxCategory = maxCategory;
-    }
-
-    public List<Food> getFood() {
-        return food;
-    }
-
-    public List<Cloth> getCloth() {
-        return cloth;
-    }
-
-    public List<Life> getLife() {
-        return life;
-    }
-
-    public List<Finances> getFinances() {
-        return finances;
-    }
-
-    public List<Other> getOther() {
-        return other;
-    }
-
-    public int getMaxSum() {
-        return maxSum;
     }
 
     public String getMaxCategory() {
         return maxCategory;
     }
 
+    public int getMaxSum() {
+        return maxSum;
+    }
+
+    public void setMaxCategory(String maxCategory) {
+        this.maxCategory = maxCategory;
+    }
+
+    public void setMaxSum(int maxSum) {
+        this.maxSum = maxSum;
+    }
 }
